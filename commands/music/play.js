@@ -44,7 +44,7 @@ module.exports = {
                 }
 
                 let downloadInfo = await ytdl.getInfo(youtubeLink);
-                song = { title: downloadInfo.videoDetails.title, url: downloadInfo.videoDetails.video_url }
+                song = { title: downloadInfo.videoDetails.title, url: downloadInfo.videoDetails.video_url, thumbnail: downloadInfo.videoDetails.thumbnails[0].url };
 
                 if (!server_queue) {
                     const queue_constructor = {

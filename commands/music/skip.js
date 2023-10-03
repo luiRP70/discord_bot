@@ -31,12 +31,10 @@ module.exports = {
                     server_queue.songs.shift();
                     play.video_player(channel.id, server_queue);
 
-                    let downloadInfo = await ytdl.getInfo(server_queue.songs[0].url);
-
                     embedBody.title = "Feito! ⏭️";
-                    embedBody.description = `Pulei para o próxima faixa na fila 😀:\n \`${downloadInfo.videoDetails.title}\``;
+                    embedBody.description = `Pulei para o próxima faixa na fila 😀:\n \`${server_queue.songs[0].title}\``;
                     embedBody.footer = `Lembre, caso queira parar de ouvir, execute o comando !stop`;
-                    embedBody.thumbnail = downloadInfo.videoDetails.thumbnails[0].url;
+                    embedBody.thumbnail = server_queue.songs[0].thumbnail;
                 } else {
                     embedBody.title = "Puts! 😢";
                     embedBody.description = 'Parece que não tem nenhuma faixa na fila!';
