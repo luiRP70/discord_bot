@@ -1,6 +1,5 @@
 const Discord = require('discord.js');
 const play = require('./play.js');
-const ytdl = require('ytdl-core');
 
 module.exports = {
     name: 'stop',
