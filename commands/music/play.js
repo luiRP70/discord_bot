@@ -29,6 +29,7 @@ module.exports = {
 
                 const server_queue = queue.get(channel.id);
                 let song = {};
+                let embedBody = {};
                 let youtubeLink;
 
                 if (!query.includes('youtube.com')) {
@@ -65,29 +66,26 @@ module.exports = {
                     queue_constructor.connection = connection;
                     video_player(channel.id, queue_constructor);
 
-                    if (downloadInfo.videoDetails.title) {
-                        let embed_find = new Discord.EmbedBuilder()
-                            .setTitle('Encontrei! ⚙🔍')
-                            .setColor("Random")
-                            .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL() })
-                            .setDescription(`Busquei com minhas **anteninhas de vinil** e encontrei o audio:\n \`${downloadInfo.videoDetails.title}\``)
-                            .setThumbnail(downloadInfo.videoDetails.thumbnails[0].url)
-                            .setFooter({ text: `🎶Conectando ao canal...` });
-
-                        return msg.edit({ embeds: [embed_find] });
-                    }
+                    embedBody.title = "Encontrei! ⚙🔍";
+                    embedBody.description = `Busquei com minhas **anteninhas de vinil** e encontrei o audio:\n \`${downloadInfo.videoDetails.title}\``;
+                    embedBody.footer = `🎶Conectando ao canal...`;
                 } else {
                     server_queue.songs.push(song);
-                    let embed_add_track = new Discord.EmbedBuilder()
-                        .setTitle('Adicionado a fila!')
-                        .setColor("Random")
-                        .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL() })
-                        .setDescription(`Adicionei à fila o áudio:\n \`${downloadInfo.videoDetails.title}\``)
-                        .setThumbnail(downloadInfo.videoDetails.thumbnails[0].url)
-                        .setFooter({ text: `Aguarde ou execute o comando !skip 😘` });
 
-                    return msg.edit({ embeds: [embed_add_track] });
+                    embedBody.title = "Adicionado a fila!";
+                    embedBody.description = `Adicionei à fila o áudio:\n \`${downloadInfo.videoDetails.title}\``;
+                    embedBody.footer = `Aguarde ou execute o comando !skip 😘`;
                 }
+
+                let embed_res = new Discord.EmbedBuilder()
+                    .setTitle(embedBody.title)
+                    .setColor("Random")
+                    .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL() })
+                    .setDescription(embedBody.description)
+                    .setThumbnail(downloadInfo.videoDetails.thumbnails[0].url)
+                    .setFooter({ text: embedBody.footer });
+
+                return msg.edit({ embeds: [embed_res] });
             })
         } catch (error) {
             let embedError = new Discord.EmbedBuilder()
@@ -127,5 +125,6 @@ module.exports = {
                 video_player(guildId, queue_constructor);
             });
         }
+        module.exports.video_player = video_player;
     }
 }
