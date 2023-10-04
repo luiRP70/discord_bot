@@ -8,7 +8,7 @@ module.exports = {
         try {
             const channel = interaction.member.voice.channel;
             if (!channel) {
-                throw new Error('Voce precisa estar em um canal de voz para usar este comando!');
+                throw 'Voce precisa estar em um canal de voz para usar este comando!';
             }
 
             let embed = new Discord.EmbedBuilder()
@@ -25,7 +25,7 @@ module.exports = {
 
                 if (server_queue) {
                     if (server_queue.songs.length < 2) {
-                        throw new Error('Nenhuma faixa foi adicionada na fila!');
+                        throw 'Nenhuma faixa foi adicionada na fila!';
                     }
                     server_queue.songs.shift();
                     play.video_player(channel.id, server_queue);
@@ -46,7 +46,7 @@ module.exports = {
                     .setColor("Random")
                     .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL() })
                     .setDescription(embedBody.description)
-                    .setThumbnail(embedBody.thumbnail )
+                    .setThumbnail(embedBody.thumbnail)
                     .setFooter({ text: embedBody.footer });
 
                 return msg.edit({ embeds: [embed_res] });
@@ -59,7 +59,7 @@ module.exports = {
                 .setDescription(`Oi ${interaction.author}.\n ${error}`)
                 .setFooter({ text: `Se atente ao erro e tente novamente...` });
 
-            interaction.reply({ embeds: [embedError] });
+            return msg.reply({ embeds: [embedError] });
         }
     }
 }

@@ -10,7 +10,7 @@ module.exports = {
         try {
             const channel = interaction.member.voice.channel;
             if (!channel) {
-                throw new Error('Voce precisa estar em um canal de voz para usar este comando!');
+                throw 'Voce precisa estar em um canal de voz para usar este comando!';
             }
 
             const query = args.join(' ');
@@ -24,7 +24,7 @@ module.exports = {
 
             interaction.reply({ embeds: [embed] }).then(async msg => {
                 if (!query) {
-                    throw new Error('Nenhum link ou palavra chave foi encontrada!');
+                    throw 'Nenhum link ou palavra chave foi encontrada!';
                 }
 
                 const server_queue = queue.get(channel.id);
@@ -36,7 +36,7 @@ module.exports = {
                     let results = await ytSearch(query);
 
                     if (!results?.all?.length) {
-                        throw new Error('Nenhum resultado foi encontrado!');
+                        throw 'Nenhum resultado foi encontrado!';
                     }
                     youtubeLink = results.all[0].url;
                 } else {
@@ -95,7 +95,7 @@ module.exports = {
                 .setDescription(`Oi ${interaction.author}.\n ${error}`)
                 .setFooter({ text: `Se atente ao erro e tente novamente...` });
 
-            interaction.reply({ embeds: [embedError] });
+            return msg.reply({ embeds: [embedError] });
         }
         const video_player = async (guildId, queue_constructor) => {
             const song = queue_constructor.songs[0];
