@@ -38,12 +38,26 @@ module.exports = {
                     if (!results?.all?.length) {
                         throw 'Nenhum resultado foi encontrado!';
                     }
-                    youtubeLink = results.all[0].url;
+
+                    for (let i = 0; i < results.all.length; i++) {
+                        if (results.all[i].type === 'video') {
+                            youtubeLink = results.all[i].url;
+                            break;
+                        }
+                    }
                 } else {
                     youtubeLink = query;
+                    if (youtubeLink.includes('&list=')) {
+                        let parts = youtubeLink.split('&');
+                        let filteredParts = parts.filter(part => !part.startsWith('list='));
+
+                        youtubeLink = filteredParts.join('&');
+                        embedBody.footer = `Este link é de uma playlist, não possuo suporte para tocar ela no momento, porém irei executar a primeira faixa.`;
+                    }
                 }
 
                 let downloadInfo = await ytdl.getInfo(youtubeLink);
+                console.log(downloadInfo);
                 song = { title: downloadInfo.videoDetails.title, url: downloadInfo.videoDetails.video_url, thumbnail: downloadInfo.videoDetails.thumbnails[0].url };
 
                 if (!server_queue) {
@@ -68,13 +82,13 @@ module.exports = {
 
                     embedBody.title = "Encontrei! ⚙🔍";
                     embedBody.description = `Busquei com minhas **anteninhas de vinil** e encontrei o audio:\n \`${downloadInfo.videoDetails.title}\``;
-                    embedBody.footer = `🎶Conectando ao canal...`;
+                    embedBody.footer = embedBody.footer ? embedBody.footer : `🎶Conectando ao canal...`;
                 } else {
                     server_queue.songs.push(song);
 
                     embedBody.title = "Adicionado a fila!";
                     embedBody.description = `Adicionei à fila o áudio:\n \`${downloadInfo.videoDetails.title}\``;
-                    embedBody.footer = `Aguarde ou execute o comando !skip 😘`;
+                    embedBody.footer = embedBody.footer ? embedBody.footer : `Aguarde ou execute o comando !skip 😘`;
                 }
 
                 let embed_res = new Discord.EmbedBuilder()
