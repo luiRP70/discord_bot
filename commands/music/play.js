@@ -21,6 +21,7 @@ module.exports = {
                 .setDescription(`Oi ${interaction.author}, estou buscando por: \`${query}\`.`)
                 .setThumbnail('https://i.pinimg.com/564x/e3/a1/18/e3a11860705794fe49f20852b68ec5c1.jpg')
                 .setFooter({ text: `🤒Aguarde só mais um pouco...` });
+            
 
             interaction.reply({ embeds: [embed] }).then(async msg => {
                 if (!query) {
@@ -100,7 +101,7 @@ module.exports = {
                     .setFooter({ text: embedBody.footer });
 
                 return msg.edit({ embeds: [embed_res] });
-            })
+            }).catch(err => throw err);
         } catch (error) {
             let embedError = new Discord.EmbedBuilder()
                 .setTitle('Algo deu errado aconteceu!')
