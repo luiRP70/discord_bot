@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
-const ytdl = require('ytdl-core');
+const ytdl = require('@distube/ytdl-core');
 const ytSearch = require('yt-search');
 
 module.exports = {
@@ -58,7 +58,6 @@ module.exports = {
                 }
 
                 let downloadInfo = await ytdl.getInfo(youtubeLink);
-                console.log(downloadInfo);
                 song = { title: downloadInfo.videoDetails.title, url: downloadInfo.videoDetails.video_url, thumbnail: downloadInfo.videoDetails.thumbnails[0].url };
 
                 if (!server_queue) {
